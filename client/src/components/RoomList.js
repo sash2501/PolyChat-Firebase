@@ -12,6 +12,8 @@ import {
 } from 'reactstrap';
 import { Stack, IStackTokens} from '@fluentui/react/lib/Stack';
 import { DefaultButton } from '@fluentui/react/lib/Button';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
+
 import Moment from 'moment';
 import firebase from '../Firebase';
 
@@ -55,12 +57,12 @@ function RoomList() {
         chat.roomname = roomname;
         chat.nickname = nickname;
         chat.date = Moment(new Date()).format('DD/MM/YYYY HH:mm:ss');
-        chat.message = `${nickname} enter the room`;
+        chat.message = `${nickname} just entered :D`;
         chat.type = 'join';
         const newMessage = firebase.database().ref('chats/').push();
         newMessage.set(chat);
 
-        firebase.database().ref('roomusers/').orderByChild('roomname').equalTo(roomname).on('value', (resp) => {
+        firebase.database().ref('roomusers/').orderByChild('roomname').equalTo(roomname).once('value', (resp) => {
             console.log("room resp",resp);
             let roomuser = [];
             roomuser = snapshotToArray(resp);
@@ -112,13 +114,6 @@ function RoomList() {
         );
 
         firebase.database().ref('rooms/').child(roomkey).remove();
-
-
-
-
-        
-
-
 }
 
     const logout = () => {
@@ -127,31 +122,50 @@ function RoomList() {
     }
 
     return (
-        <div>
+        <div className="wholePage">
             {showLoading &&
-                <Spinner color="primary" />
+                <center><ProgressIndicator label="Loading" description="Hang Tight!" /></center>
+
             }
-            <Jumbotron>
-                <h3>{nickname} <Button onClick={() => { logout() }}>Logout</Button></h3>
-                <h2>Room List</h2>
-                <div>
-                    <Link to="/addroom">Add Room</Link>
+            {/* <Jumbotron> */}
+                <center>
+                <div className="menuBar headingBreak">
+                    <div className="roomNameContainer"><h3>{nickname} </h3></div>
+                    <div className="commandBar"><Button onClick={() => { logout() }}>Logout</Button></div>
                 </div>
-                <ListGroup>
+                <div className="aboutContainer"><h2>Create Public Room</h2>
+                <Stack horizontal horizontalAlign="center">
+                    <Stack.Item>
+                    <h4>Create Room: </h4>
+                    </Stack.Item>
+                    <Stack.Item>
+                    <Link to="/addroom"><DefaultButton
+                                className="roomBtn" 
+                                iconProps={{iconName: 'AddHome'}}
+                                text="Add Room" /></Link>
+                    </Stack.Item>
+                </ Stack></div>
+                </center>
+                <center>
+                <Stack className="aboutContainer" vertical>
+                    <h2>Public Room List</h2>
                     {room.map((item, idx) => (
-                        <ListGroup horizontal>
-                            <ListGroupItem key={idx} action onClick={() => { enterChatRoom(item.roomname) }}>
-                            {item.roomname} 
-                            </ListGroupItem>
-                            <ListGroupItem action onClick={() => {
+                        <Stack className="aboutContainer" horizontal>
+                            <Stack.Item key={idx}>
+                            <DefaultButton className="roomBtn" onClick={() => { enterChatRoom(item.roomname) }} text={item.roomname} />
+                            </Stack.Item>
+                            <Stack.Item>
+                            <DefaultButton 
+                                onClick={() => {
                                 removeRoom(item.roomname, item.key)
-                                }}>
-                                Delete
-                            </ListGroupItem>
-                        </ ListGroup>
-                    ))}                    
-                </ListGroup>
-            </Jumbotron>
+                                }} 
+                                iconProps={{iconName: 'Delete'}}
+                                text="Delete Room" />
+                            </Stack.Item>
+                        </ Stack>
+                    ))} 
+                </Stack></center>
+            {/* </Jumbotron> */}
         </div>
     );
 }

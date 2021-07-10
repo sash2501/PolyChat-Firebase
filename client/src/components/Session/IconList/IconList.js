@@ -157,7 +157,7 @@ const InfoBar = ({ room, media, myPeer, users, sub, setSub, sendSub, setShowSubt
 }
 
 reload = function() {
-  window.location.href = "http://localhost:3000/chatroom/:room";
+  window.location.href = "http://localhost:3000/roomlist";
 }
 
 //console.log("call location in iconlist",window.location)

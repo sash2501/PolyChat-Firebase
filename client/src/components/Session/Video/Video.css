@@ -15,4 +15,7 @@ video {
   max-width: 1000px;
   height: 100%;
   width: 100%;
+  border-radius: 1rem;
+  object-fit:cover;
+  transform: rotateY(180deg);
 }

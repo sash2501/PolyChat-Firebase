@@ -12,6 +12,7 @@ import {
     Label, 
     Input
 } from 'reactstrap';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import firebase from '../Firebase';
 
 function AddRoom() {
@@ -32,7 +33,10 @@ function AddRoom() {
                         </Alert>
                     </div>
                 );
-            } else {
+            } if (!room.roomname) {
+                history.goBack();
+            }
+            else {
                 const newRoom = firebase.database().ref('rooms/').push();
                 newRoom.set(room);
                 history.goBack();
@@ -47,11 +51,11 @@ function AddRoom() {
     }
 
     return (
-        <div>
+        <div className="wholePage">
             {showLoading &&
-                <Spinner color="primary" />
+                <center><ProgressIndicator label="Loading" description="Hang Tight!" /></center>
             }
-            <Jumbotron>
+            <Jumbotron className="aboutContainer">
                 <h2>Please enter new Room</h2>
                 <Form onSubmit={save}>
                     <FormGroup>

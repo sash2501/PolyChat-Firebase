@@ -9,6 +9,7 @@ import {
     Label, 
     Input
 } from 'reactstrap';
+import { ProgressIndicator } from '@fluentui/react/lib/ProgressIndicator';
 import firebase from '../Firebase';
 
 function Login() {
@@ -41,22 +42,32 @@ function Login() {
     }
 
     return (
-        <div>
+        <div className="wholePage">
             {showLoading &&
-                <Spinner color="primary" />
+                <center><ProgressIndicator label="Loading" description="Hang Tight!" /></center>
             }
-            <h1>Sassycode's Teams</h1>
-            <Jumbotron>
+            <h1><center> SASSYCODE'S TEAMS </center></h1> 
+            <center><div className="aboutContainer">
+                <p>
+                    Welcome to Sassycode's Teams! Get started by creating a user name, or loggin in to your created user name.
+                </p>
+                <p>
+                    Once logged in, Join a public room or create one of your own room and connect with your team.
+                </p>
+            </div>
+            <div className="loginContainer">
+            {/* <Jumbotron> */}
                 <Form onSubmit={login}>
                     <FormGroup>
-                        <Label>Nickname</Label>
-                        <Input type="text" name="nickname" id="nickname" placeholder="Enter Your Nickname" value={creds.nickname} onChange={onChange} />
+                        <Label>Username</Label>
+                        <Input type="text" name="nickname" id="nickname" placeholder="Enter Your Username" value={creds.nickname} onChange={onChange} />
                     </FormGroup>
                     <Button variant="primary" type="submit">
                         Login
                     </Button>
                 </Form>
-            </Jumbotron>
+            {/* </Jumbotron> */}
+            </div></center>
         </div>
     );
 }
