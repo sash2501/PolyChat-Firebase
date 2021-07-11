@@ -3,10 +3,10 @@
   box-shadow: -4px 10px 35px -1px rgba(0, 0, 0, 0.75);
   flex-direction: column;
   justify-content: space-between;
-  background: #9900ff;
+  background: #cccbcb;
   border-radius: 8px;
   height: auto;
-  width: 80%;
+  width: calc(100% -18vw);
   border-color: black;
   color: black;
   padding-left: 20px;

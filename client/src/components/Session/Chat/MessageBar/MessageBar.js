@@ -6,11 +6,11 @@ const MessageBar = () => {
 
   return(
   <div className="infoBar">
-    <div className="leftInnerContainer">      
+  <center>
+    <div>      
       <h3>Message</h3>
     </div>
-    <div className="rightInnerContainer">        
-    </div>
+  </center>
   </div>
 );
 };

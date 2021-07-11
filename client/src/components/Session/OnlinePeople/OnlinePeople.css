@@ -5,12 +5,13 @@
   color: rgb(24, 1, 1);
   height: 150%;
   justify-content: space-between;
+  background-color: aqua;
 }
 .activeContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #ffffff;
+  background: #9e3434;
   border-radius: 8px;
   height: auto;
   width: 100%;
@@ -30,7 +31,7 @@
 }
 
 .activeContainer img {
-  padding-left: 10px;
+  padding-left: 0px;
 }
 
 .textContainer h1 {
@@ -38,7 +39,4 @@
 }
 
 @media (min-width: 320px) and (max-width: 1200px) {
-  .textContainer {
-    display: none;
-  }
 }

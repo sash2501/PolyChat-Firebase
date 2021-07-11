@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { IIconProps, initializeIcons } from '@fluentui/react';
+import { IIconProps, initializeIcons, IContextualMenuProps } from '@fluentui/react';
 import { Stack, IStackTokens} from '@fluentui/react/lib/Stack';
-import { IconButton, PrimaryButton, DefaultButton }  from '@fluentui/react/lib/Button';
+import { IconButton, PrimaryButton, DefaultButton, CommandButton, IButtonStyles }  from '@fluentui/react/lib/Button';
 import { Link } from "react-router-dom";
 import { Panel } from '@fluentui/react/lib/Panel';
 import { Dialog, DialogType, DialogFooter } from '@fluentui/react/lib/Dialog';
 
-import { useBoolean } from '@fluentui/react-hooks';
+import { useBoolean, useId } from '@fluentui/react-hooks';
 
 // import onlineIcon from '../../icons/onlineIcon.png';
 // import closeIcon from '../../icons/closeIcon.png';
@@ -26,7 +26,9 @@ const screenCast: IIconProps = { iconName: 'ScreenCast' };
 const people: IIconProps = { iconName: 'People' };
 const peopleAdd: IIconProps = { iconName: 'PeopleAdd' };
 const mailAdd: IIconProps = { iconName: 'NewMail' };
-const cc: IIconProps = { iconName: 'CCSolid' };
+const cc: IIconProps = { iconName: 'TextCallout' };
+const editNote: IIconProps = { iconName: 'EditNote' };
+const raiseHand: IIconProps = { iconName: 'HandsFree' };
 
 const modelProps = {
   isBlocking: false,
@@ -48,16 +50,36 @@ mic.continuous = true
 mic.interimResults = true
 mic.lang = 'en-US'
 
-const InfoBar = ({ room, media, myPeer, users, sub, setSub, sendSub, setShowSubtitle, showSubtitle, myStream}) => {
+const InfoBar = ({ user, room, media, myPeer, users, sub, setSub, sendSub, setShowSubtitle, showSubtitle, myStream, showNote, setShowNote, setIsScreen}) => {
+
+  const menuProps: IContextualMenuProps = {
+    items: [
+      {
+        key: 'emailMessage',
+        text: 'Email message',
+        iconProps: { iconName: 'NewMail' },
+        href: "mailto:?subject=Join PolyChat Meeting&amp;body="+user+" is inviting you to a meeting. Join the meeting: http://localhost:3000/ Join the Room: "+room,
+        target: '_blank'
+      },
+      {
+        key: 'gmailInvite',
+        text: 'Gmail invite',
+        iconProps: { iconName: 'Mail' },
+        href: "https://mail.google.com/mail/u/0/?fs=1&su=Join+Sassycode's+Team+meeting&body="+user+"+is+inviting+you+to+a+meeting.%0A%0AJoin+the+meeting:%0Ahttp://localhost:3000/%0A%0AJoin+Room:"+room+"&tf=cm",
+        target: "_blank"
+      },
+    ],
+  };
 
   //const [muted, { toggle: setMuted }] = useBoolean(false);
   const [muted, setMuted] = useState(false);
   const [cameraOff, setCameraOff] = useState(false);
   const [isOpen, { setTrue: openMessage, setFalse: dismissMessage }] = useBoolean(false);
-  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
+  const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true); 
   const [isListening, setIsListening] = useState(false)
   const [note, setNote] = useState(null)
   const [savedNotes, setSavedNotes] = useState([])
+  const titleId = useId('title');
 
   useEffect(() => {
     handleListen()
@@ -131,25 +153,18 @@ const InfoBar = ({ room, media, myPeer, users, sub, setSub, sendSub, setShowSubt
     setShowSubtitle(!showSubtitle)    
         
   }
-  
-    const shareScreen =() => {
-      navigator.mediaDevices.getDisplayMedia({cursor:true})
-      .then(screenStream=>{
-        console.log("screen sharing");
-        // myPeer.replaceTrack(media.getVideoTracks()[0],screenStream.getVideoTracks()[0],media)
-        // userVideo.current.srcObject=screenStream
-        // screenStream.getTracks()[0].onended = () =>{
-        // myPeer.replaceTrack(screenStream.getVideoTracks()[0],stream.getVideoTracks()[0],media)
-        // userVideo.current.srcObject=media
-        //}
-        myPeer.replaceTrack(myStream.getVideoTracks()[0],screenStream.getVideoTracks()[0],myStream)
-        //userVideo.current.srcObject=screenStream
 
-        // screenStream.getTracks()[0].onended = () =>{
-        //   myPeer.current.replaceTrack(screenStream.getVideoTracks()[0],myStream.getVideoTracks()[0],myStream)
-        //   userVideo.current.srcObject=myStream }
-      })
-    }
+  const toggleNotes = () => {
+    console.log("toggleNotes",showNote)
+    setShowNote(!showNote)
+  }
+
+  const toggleSceen = () => {
+    console.log("setting screen");
+    setIsScreen(true);
+  }
+  
+    
 
     function reload() {
       console.log("reloading")
@@ -157,7 +172,7 @@ const InfoBar = ({ room, media, myPeer, users, sub, setSub, sendSub, setShowSubt
 }
 
 reload = function() {
-  window.location.href = "http://localhost:3000/roomlist";
+  window.location.href = "http://localhost:3000/";
 }
 
 //console.log("call location in iconlist",window.location)
@@ -181,29 +196,31 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
     </div>
     <div className="commandBar">
       <Stack horizontal tokens={stackTokens} wrap={true}>
-        <DefaultButton
+        <IconButton
+          className="iconBtn"
           toggle
           checked={muted}
-          text={muted ? 'Mic muted' : 'Mic unmuted'}
+          title={muted ? 'Mic muted' : 'Mic unmuted'}
           iconProps={muted ? micOffIcon : micOnIcon}
           onClick={toggleMicrophone}
           style={buttonStyle}
         />          
        
-        <DefaultButton
+        <IconButton
+          className="iconBtn"
           toggle
           checked={cameraOff}
-          text={cameraOff ? 'Cam Off' : 'Cam On'}
+          title={cameraOff ? 'Cam Off' : 'Cam On'}
           iconProps={cameraOff ? camOffIcon : camOnIcon}
           onClick={toggleCamera}
           style={buttonStyle}
         />  
-        <DefaultButton 
+        {/* <DefaultButton 
           text="Screen" 
-          onClick={shareScreen} 
+          onClick={toggleSceen} 
           iconProps={screenCast}
           style={buttonStyle}
-        />
+        /> */}
         <Link to={`/`}>
           <DefaultButton 
           text="End Call" 
@@ -213,11 +230,26 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
           />  
         </Link> 
         <IconButton 
+          className="iconBtn"
           iconProps={cc}
           title="Subtitle"
           onClick={toggleSubtitle}
           style={buttonStyle}
         />
+        <IconButton 
+          id="noteBtn"
+          className="iconBtn"
+          iconProps={editNote}
+          title="Notes"
+          onClick={toggleNotes}
+          style={buttonStyle}
+        />
+        {/* <IconButton 
+          className="iconBtn"
+          iconProps={raiseHand}
+          title="Hands"
+          style={buttonStyle}
+        /> */}
         <DefaultButton 
           secondaryText="See User List" 
           onClick={toggleHideDialog} 
@@ -235,28 +267,29 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
             <OnlinePeople users={users}/>
             <DialogFooter>
               <Stack tokens={{childrenGap: 10}} horizontal horizontalAlign='center'>
-                <PrimaryButton 
+                <CommandButton 
                   text="Add Participants"
                   iconProps={peopleAdd}
+                  menuProps={menuProps}
                 />
-                <IconButton 
+                {/* <IconButton 
                   iconProps={mailAdd}
                   href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site http://www.website.com."
                   target="_blank"
                   title="Share Mail"
-                />
+                /> */}
                 {/* <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site http://www.website.com."
                   title="Share by Email"
                   target="_blank"
                   rel="noopener noreferrer">
                   <img src="http://png-2.findicons.com/files/icons/573/must_have/48/mail.png"/>
                 </a> */}
-                <a href="https://mail.google.com/mail/u/0/?fs=1&su=Join+Sassycode's+Team+meeting&body=User+is+inviting+you+to+a+meeting.%0A%0AJoin+the+meeting:%0Ahttp://localhost:3000/%0A%0AJoin+Room:+_roomname_&tf=cm"
+                {/* <a href="https://mail.google.com/mail/u/0/?fs=1&su=Join+Sassycode's+Team+meeting&body=User+is+inviting+you+to+a+meeting.%0A%0AJoin+the+meeting:%0Ahttp://localhost:3000/%0A%0AJoin+Room:+_roomname_&tf=cm"
                   title="Share by Gmail"
                   target="_blank"
                   rel="noopener noreferrer">
                   <img src="https://img.icons8.com/ios/20/000000/google-logo--v1.png"/>
-                </a>
+                </a> */}
               </Stack>
             </DialogFooter>
           </Dialog>

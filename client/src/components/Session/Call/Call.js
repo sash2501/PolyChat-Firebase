@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useParams, useLocation } from "react-router-dom";
 //import Peer from 'peer';
 import Peer from "simple-peer";
 import queryString from 'query-string';
-// import styled from "styled-components";
+import styled from "styled-components";
 import { Stack, IStackTokens} from '@fluentui/react/lib/Stack';
 import { DefaultButton } from '@fluentui/react/lib/Button';
+import { TextField } from '@fluentui/react/lib/TextField';
+import { useParams, useLocation, useHistory } from "react-router-dom";
 
 
 import InfoBar from '../Chat/MessageBar/MessageBar';
@@ -21,7 +22,7 @@ import Subtitles from '../Subtitles/Subtitles';
 import './Call.css';
 // client-side
 const io = require("socket.io-client");
-const ENDPOINT = 'http://localhost:5001'
+const ENDPOINT = 'http://localhost:5000'
 //const stackTokens: IStackTokens = { childrenGap: 20 };
 
 let socket;
@@ -35,14 +36,12 @@ const itemStyles: React.CSSProperties = {
   width: 50,
 };
 
-// const StyledVideo = styled.video`
-//     height: 40%;
-//     width: 50%;
-// `;
-// const videoConstraints = {
-//     height: window.innerHeight / 2,
-//     width: window.innerWidth / 2
-// };
+const StyledVideo = styled.video`
+    height: 40%;
+    width: 50%;
+`;
+
+const buttonStyle = { borderRadius: '5px', boxShadow: '-4px 10px 35px -1px rgba(0, 0, 0, 0.75)'}
 
 const stackTokens: IStackTokens = {
     childrenGap: `10 10`, //rowGap + ' ' + columnGap,
@@ -51,12 +50,8 @@ const stackTokens: IStackTokens = {
 
 const Call = ( {location}) => {
 
-  console.log("loacation rn", location);
   location = useLocation();
-  console.log("location", location.search);
-  // const { url } = useParams();
-  // console.log("url", url);
-
+  const history = useHistory();
   const [username, setUserName] = useState('');
   const [roomname, setRoomName] = useState(''); //initialize as empty string
   const [message, setMessage] = useState(''); //store message
@@ -74,17 +69,21 @@ const Call = ( {location}) => {
   const [subUser, setSubUser] = useState('');
   const [subText, setSubText] = useState('');
   const [showSubtitle, setShowSubtitle] = useState(false);
+  const [note, setNote] = useState('');
+  const [showNote, setShowNote] = useState(false);
   const [myPeer, setmyPeer] = useState(null);
-  
+  const [isRaised, setIsRaised] = useState(true);
+  const [isScreen, setIsScreen] = useState(false);
+
+  const editor = document.getElementById("editor")
+  const textAreaRef = useRef(null);
+
   useEffect( () => {
     const { name, room } = queryString.parse(location.search);
 
     socket = io(ENDPOINT);
 
     setUserName(name);
-    //const name = localStorage.getItem('nickname');
-    //setUserName(localStorage.getItem('nickname'))
-    //const room= "Room1";
     setRoomName(room);
 
 
@@ -92,7 +91,12 @@ const Call = ( {location}) => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
         //userVideo.current.srcObject = stream;
         setMyStream(stream);
-        socket.emit("join room", {name, room}, error => {if(error) alert(error)});
+        socket.emit("join room", {name, room}, error => {
+          if(error) {
+            history.push('/login');
+            alert(error);
+
+        }});
 
         
         socket.on("all users", users => {
@@ -154,7 +158,6 @@ const Call = ( {location}) => {
         })
     })
 
-    
 
     // return () => {
     //     //disconnect useEffect hook -  unmounting of component
@@ -192,7 +195,21 @@ const Call = ( {location}) => {
           console.log("sub",sub)         
           
     })
+
+    socket.on('notes', (notes) => {
+      console.log("notes object", notes);
+      console.log("notes text", notes.text)
+      setNote(notes.text)
+    })
   },[]);
+
+  // useEffect(() => {
+  //   console.log("Sending notes", notes)    
+  //     if(note) {
+  //       console.log("emiting notes")
+  //       socket.emit('sendNotes', note ,() => console.log("sending notes to server"));
+  //   }
+  // },[]);
 
   console.log("sub out",sub)
   console.log("sublist out",subList);
@@ -251,27 +268,40 @@ const Call = ( {location}) => {
     }
   }
 
+  const sendNotes = (value) => {
+    console.log("Sending notes", value)    
+      if(value.length>=0) {
+        console.log("emiting notes")
+        socket.emit('sendNotes', value ,() => console.log("sending notes to server"));
+    }    
+  }
+
+  if(editor) {
+    editor.addEventListener("keyup", (evt) => {
+      const text = editor.value
+      console.log("editor txt",text)
+      socket.emit('sendNotes', text ,() => console.log("sending notes to server"));
+    })
+  }
+  if(editor) editor.value = note
+  if(showNote) {
+    document.querySelectorAll(".notesContainer").forEach(a=>a.style.display = "block");
+  } else {
+    document.querySelectorAll(".notesContainer").forEach(a=>a.style.display = "none");
+  }
+
+  function copyToClipboard(e) {
+    textAreaRef.current.select();
+    document.execCommand('copy');
+    e.target.focus();
+  };
 
   console.log("transcipt passed", sub);
-  // const getUsersList = (event) => {
-  //   event.preventDefualt();
-
-  //   socket.emit('sendUserList', )
-  // }
 
   console.log(message, messageList);
   const peerList_duplicateLess = peersList.filter((v,i) => {
     return peersList.map((peer)=> peer.peerID).indexOf(v.peerID) === i
   })
-
-  // if(peersList.length === 1)  {
-  //   //console.log("length is only 1");
-  //   peersList.map((peer) => {
-  //     myPeer = peer;
-  //   })
-  //   console.log(myPeer.peerID);
-
-  // }
 
   //console.log("peerslist final",peersList);  
   console.log("users in room", usersInRoom);
@@ -280,48 +310,63 @@ const Call = ( {location}) => {
   console.log("sub  sent",sub)
   console.log("showSubtitle",showSubtitle)
   console.log("mypeer",myPeer)
- //console.log("myownSTream",myStream);
+  console.log("note in end", note)
+
+  console.log("screen set",isScreen)
+
+
   return (
-    <div>
-    <Stack Vertical>
+    <div className="callPage">
+    <Stack vertical>
       <Stack horizontal>
-      <Stack vertical>
-        <IconList room={roomname} media={myStream} myPeer={myPeer} users={usersInRoom}  sub={sub} sendSub={sendTranscript} setShowSubtitle={setShowSubtitle} showSubtitle={showSubtitle} myStream={myStream}/> 
-        <div className="videoGrid">
-        {/* <Container> */}
-        {/* <Stack horizontal> */}
-        <Stack className="videoStack"
-          horizontal
-          wrap={true}
-          disableShrink={false}
-          horizontalAlign="center"
-          verticalAlign="center"
-          tokens={stackTokens} 
-          overflow= 'auto'
-          grow={true}
-        >
-            {/* <StyledVideo id="myVideo" muted ref={userVideo} autoPlay playsInline /> */}
-            {peerList_duplicateLess.map((peer, id) => {
-                console.log("passed video peer",peer)
-                return (                    
-                    <Video key={peer.peerID} peer={peer.peer} videoId={peer.peerID} normalRef={myStream} users={usersInRoom} setmyPeer={setmyPeer}/>
-                );
-            })}
-            </Stack>
-        {/* </Container>   */}
+        <Stack vertical>
+          <IconList user={username} room={roomname} media={myStream} myPeer={myPeer} users={usersInRoom}  sub={sub} sendSub={sendTranscript} setShowSubtitle={setShowSubtitle} showSubtitle={showSubtitle} myStream={myStream} showNote={showNote} setShowNote={setShowNote} setIsScreen={setIsScreen} /> 
+          <Stack horizontal>  
+            <div className="notesContainer">      
+              <h2><center>Meeting Notes</center></h2>
+              <textarea rows="30" id="editor" className="notesArea" placeholder="Type Your Text..." ref={textAreaRef}></textarea> 
+                <center><DefaultButton 
+                  text="Copy to Clipboard" 
+                  onClick={copyToClipboard} 
+                  iconProps={{ iconName: 'Copy' }}
+                  style={buttonStyle}/></center>
+            </div>    
+            <div className="videoGrid">
+            {/* <Container> */}
+            {/* <Stack horizontal> */}
+              <Stack className="videoStack"
+                  horizontal
+                  wrap={true}
+                  disableShrink={false}
+                  horizontalAlign="center"
+                  verticalAlign="center"
+                  tokens={stackTokens} 
+                  overflow= 'auto'
+                  grow={true}
+                >
+                    {/* <StyledVideo id="myVideo" muted ref={userVideo} autoPlay playsInline /> */}
+                    {peerList_duplicateLess.map((peer, id) => {
+                        console.log("passed video peer",peer)
+                        return (                    
+                            <Video key={peer.peerID} peer={peer.peer} videoId={peer.peerID} normalRef={myStream} users={usersInRoom} setmyPeer={setmyPeer} isScreen={isScreen} />
+                        );
+                    })}
+                </Stack>
+            {/* </Container>   */}
+            </div>
+          </Stack>
+        </Stack>
+        <div className="messageContainer">
+          <div className="container">
+            <InfoBar />   
+            <MessageDisplayer messages={messageList} name={username} />   
+            <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
+          </div>
         </div>
-      </Stack>
-      <div className="messageContainer">
-        <div className="textcontainer">
-          <InfoBar />   
-          <MessageDisplayer messages={messageList} name={username} />   
-          <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
-        </div>
-      </div>
       </Stack>
       
       {showSubtitle && (<Subtitles subUser={subUser} subText={subText}/>)}
-      </Stack>
+    </Stack>
     
     </div>
   )
