@@ -149,6 +149,13 @@ footer.StickyFooter {
   background-size: cover;
 }
 
+.callPage {
+  background-image: url("https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80");
+  background-repeat: no-repeat;
+  height: 100vh;
+  background-size: cover;
+}
+
 .roomBtn {
   min-width: 40vw;
   border-radius: 6px;

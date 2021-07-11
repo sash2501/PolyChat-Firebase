@@ -130,7 +130,7 @@ function ChatRoom() {
                                     </Button>
                                 </Card>
                                 <Card className="UsersCard">
-                                    <Link to={`/call?name=${nickname}&room=${roomname}`}>
+                                    <Link target="_blank" to={`/call?name=${nickname}&room=${roomname}`}>
                                         <Button variant="primary" type="button">
                                             Join Video Call
                                         </Button>
