@@ -19,13 +19,8 @@ function App() {
   return (
     <Router>
       <div>
-        <Redirect
-          to={{
-            pathname: "/roomlist",
-            state: { from: location }
-          }}
-        />
         <Switch>
+          <Redirect exact from="/" to="/login" /> 
           <Route path="/login">
             <Login />
           </Route>
@@ -38,10 +33,9 @@ function App() {
           <SecureRoute path="/chatroom/:room">
             <ChatRoom />
           </SecureRoute>
-          <SecureRoute location={location} path="/call">
+          <Route location={location} path="/call">
             <Call />
-          </SecureRoute>
-          
+          </Route>          
         </Switch>
       </div>
     </Router>
