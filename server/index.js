@@ -68,6 +68,24 @@ io.on("connect", (socket) => {
     callback();
   })
 
+  socket.on('userRaise', ({event}, callback) => {
+    console.log("id",socket.id);
+    const user = getUser(socket.id);
+    
+    if(user) {
+      if(event === 'raise') {
+        console.log("user raised hand", event, user);   
+        io.to(user.room).emit('raise', {id: user.id, name: user.name})
+        socket.broadcast.to(user.room).emit('message', {user: 'Jarvis', text: `${user.name} wants to speak!`})
+      }
+      if(event === 'lower') {
+        console.log("user lowered hand", event, user);   
+        io.to(user.room).emit('lower', {id: user.id, name: user.name})
+      }
+    }
+    callback();
+  })
+
   socket.on("sending signal", payload => {
         //console.log("sending signal ",payload.userToSignal)
         //socket.broadcast.to(payload.userToSignal).emit('user joined', { signal: payload.signal, callerID: payload.callerID });

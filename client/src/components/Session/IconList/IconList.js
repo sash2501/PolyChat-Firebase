@@ -50,7 +50,7 @@ mic.continuous = true
 mic.interimResults = true
 mic.lang = 'en-US'
 
-const InfoBar = ({ user, room, media, myPeer, users, sub, setSub, sendSub, setShowSubtitle, showSubtitle, myStream, showNote, setShowNote, setIsScreen}) => {
+const InfoBar = ({ user, room, media, myPeer, users, sub, setSub, sendSub, setShowSubtitle, showSubtitle, myStream, showNote, setShowNote, setIsScreen, toggleRaise, isRaised}) => {
 
   const menuProps: IContextualMenuProps = {
     items: [
@@ -72,8 +72,8 @@ const InfoBar = ({ user, room, media, myPeer, users, sub, setSub, sendSub, setSh
   };
 
   //const [muted, { toggle: setMuted }] = useBoolean(false);
-  const [muted, setMuted] = useState(false);
-  const [cameraOff, setCameraOff] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [cameraOff, setCameraOff] = useState(true);
   const [isOpen, { setTrue: openMessage, setFalse: dismissMessage }] = useBoolean(false);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true); 
   const [isListening, setIsListening] = useState(false)
@@ -244,12 +244,13 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
           onClick={toggleNotes}
           style={buttonStyle}
         />
-        {/* <IconButton 
+        <IconButton 
           className="iconBtn"
-          iconProps={raiseHand}
-          title="Hands"
+          iconProps={{iconName: 'HandsFree' }}
+          title={isRaised?"Lower Hand":"Raise Hand"}
+          onClick={toggleRaise}
           style={buttonStyle}
-        /> */}
+        />
         <DefaultButton 
           secondaryText="See User List" 
           onClick={toggleHideDialog} 
@@ -272,24 +273,6 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
                   iconProps={peopleAdd}
                   menuProps={menuProps}
                 />
-                {/* <IconButton 
-                  iconProps={mailAdd}
-                  href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site http://www.website.com."
-                  target="_blank"
-                  title="Share Mail"
-                /> */}
-                {/* <a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site http://www.website.com."
-                  title="Share by Email"
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  <img src="http://png-2.findicons.com/files/icons/573/must_have/48/mail.png"/>
-                </a> */}
-                {/* <a href="https://mail.google.com/mail/u/0/?fs=1&su=Join+Sassycode's+Team+meeting&body=User+is+inviting+you+to+a+meeting.%0A%0AJoin+the+meeting:%0Ahttp://localhost:3000/%0A%0AJoin+Room:+_roomname_&tf=cm"
-                  title="Share by Gmail"
-                  target="_blank"
-                  rel="noopener noreferrer">
-                  <img src="https://img.icons8.com/ios/20/000000/google-logo--v1.png"/>
-                </a> */}
               </Stack>
             </DialogFooter>
           </Dialog>

@@ -15,6 +15,10 @@ const stackStyles = {
     root: { backgroundColor: 'rgba(255, 122, 122, 0.596)', borderRadius: '5px'}
   };
 
+const raisedStyles = {
+    root: { backgroundColor: 'yellow', borderRadius: '5px'}
+  };
+
 // const stackRaisedStyles = {
 //     root: { backgroundColor: 'yellow', borderRadius: '5px'}
 //   };
@@ -23,6 +27,7 @@ const Video = (props) => {
     const ref = useRef();
     //console.log("video props",props);
     const [ismuted, setMuted] = useState(false)
+    const [isRaised, setIsRaised] = useState(false);
     const [name, setName] = useState('')
     const myPeer=useRef();
 
@@ -57,29 +62,33 @@ const Video = (props) => {
         //console.log("ref video ka",ref);
         //console.log("ref passed wala", props.NormalRef)
     }, []);
-    console.log("mypeer", myPeer)
 
-    // if(props.isScreen && myPeer.current) {
-    //         console.log("in Video, screen is true",myPeer,props.normalRef,ref);
-    //          navigator.mediaDevices.getDisplayMedia({cursor:true})
-    //          .then(screenStream=>{
-    //              console.log("screen sharing");
-    //              myPeer.current.replaceTrack(props.normalRef.getVideoTracks()[0],screenStream.getVideoTracks()[0],props.normalRef)
-    //              ref.current.srcObject=screenStream
-            
-            
-    //         //     screenStream.getTracks()[0].onended = () =>{
-    //         //     console.log("screen ended");
-    //         //     myPeer.current.replaceTrack(screenStream.getVideoTracks()[0],props.normalRef.getVideoTracks()[0],props.normalRef)
-    //         //     ref.current.srcObject=props.normalRef;
-    //         //     }
-    //          })
-    // }
+    useEffect(() => {
+        if(props.raiseSocketID) {
+            console.log("video received rasing hand", props.raiseSocketID)
+            if(props.raiseSocketID === props.videoId && isRaised === false) setIsRaised(true)
+            console.log("israised state", isRaised)
+        }
+
+    })
+
+    useEffect(() => {
+        if(props.lowerSocketID) {
+            console.log("video received lowering hand", props.lowerSocketID)
+            if(props.lowerSocketID === props.videoId) {
+                setIsRaised(false)
+                console.log("israised state", isRaised)
+            }
+        }
+    })
+    console.log("mypeer", myPeer)
+    console.log("video socket id",props.videoId);
+    console.log("lowerSocketID", props.lowerSocketID);
 
     return (
         <div className="videoCell">
         <Stack vertical tokens={{childrenGap: 10}} 
-        styles={stackStyles}>
+        styles={isRaised? raisedStyles: stackStyles}>
             <VideoCell playsInline muted={ismuted} autoPlay ref={ref} />
             <h2><center>{name}</center></h2>
         </Stack>

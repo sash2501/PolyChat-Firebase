@@ -65,19 +65,25 @@ const Call = ( {location}) => {
   const userVideo = useRef();
   const peersRef = useRef([]); //related to ui and visuals
   const [callEnded, setCallEnded] = useState(false);
-  //let myPeer;
+  //Subtitle
   const [subUser, setSubUser] = useState('');
   const [subText, setSubText] = useState('');
   const [showSubtitle, setShowSubtitle] = useState(false);
+  //Notes
   const [note, setNote] = useState('');
   const [showNote, setShowNote] = useState(false);
   const [myPeer, setmyPeer] = useState(null);
-  const [isRaised, setIsRaised] = useState(true);
   const [isScreen, setIsScreen] = useState(false);
-
+  const [raiseSocketID, setRaisedSocketID] = useState('');
+  const [lowerSocketID, setLoweredSocketID] = useState('');
+  const [isRaised, setIsRaised] = useState(false);
+  
+  //NoteEditor
   const editor = document.getElementById("editor")
   const textAreaRef = useRef(null);
 
+  //Board
+  
   useEffect( () => {
     const { name, room } = queryString.parse(location.search);
 
@@ -91,6 +97,8 @@ const Call = ( {location}) => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
         //userVideo.current.srcObject = stream;
         setMyStream(stream);
+        stream.getVideoTracks()[0].enabled = false; 
+        stream.getAudioTracks()[0].enabled = false;
         socket.emit("join room", {name, room}, error => {
           if(error) {
             history.push('/login');
@@ -201,15 +209,19 @@ const Call = ( {location}) => {
       console.log("notes text", notes.text)
       setNote(notes.text)
     })
-  },[]);
 
-  // useEffect(() => {
-  //   console.log("Sending notes", notes)    
-  //     if(note) {
-  //       console.log("emiting notes")
-  //       socket.emit('sendNotes', note ,() => console.log("sending notes to server"));
-  //   }
-  // },[]);
+    socket.on('raise', (person) => {
+      console.log("received raising",person.id,person.name)
+      setRaisedSocketID(person.id);
+      setLoweredSocketID('');
+    })
+
+    socket.on('lower', (person) => {
+      console.log("received lowering",person.id,person.name)
+      setLoweredSocketID(person.id);
+      setRaisedSocketID('')
+    })
+  },[]);
 
   console.log("sub out",sub)
   console.log("sublist out",subList);
@@ -268,6 +280,28 @@ const Call = ( {location}) => {
     }
   }
 
+  const toggleRaise = () => {
+    if(!isRaised) {
+      userhandRaise()
+    }
+    else {
+      userhandLower()
+    }
+    setIsRaised(!isRaised)    
+  }
+
+  const userhandRaise = () => {
+    console.log(username," raised their hand");
+    var event = "raise"
+    socket.emit('userRaise',{username, event}, () => console.log("username is raising hand in client"));
+  }
+
+  const userhandLower = () => {
+    console.log(username," raised their hand");
+    var event = "lower"    
+    socket.emit('userRaise',{username, event}, () => console.log("username is lowering hand in client"));
+  }
+
   const sendNotes = (value) => {
     console.log("Sending notes", value)    
       if(value.length>=0) {
@@ -296,6 +330,7 @@ const Call = ( {location}) => {
     e.target.focus();
   };
 
+
   console.log("transcipt passed", sub);
 
   console.log(message, messageList);
@@ -307,10 +342,11 @@ const Call = ( {location}) => {
   console.log("users in room", usersInRoom);
   console.log("result wout duplicate", peerList_duplicateLess);
   //console.log("location",location)
-  console.log("sub  sent",sub)
-  console.log("showSubtitle",showSubtitle)
-  console.log("mypeer",myPeer)
-  console.log("note in end", note)
+  // console.log("sub  sent",sub)
+  // console.log("showSubtitle",showSubtitle)
+  // console.log("mypeer",myPeer)
+  // console.log("note in end", note)
+  console.log("lowerid", lowerSocketID)
 
   console.log("screen set",isScreen)
 
@@ -320,7 +356,7 @@ const Call = ( {location}) => {
     <Stack vertical>
       <Stack horizontal>
         <Stack vertical>
-          <IconList user={username} room={roomname} media={myStream} myPeer={myPeer} users={usersInRoom}  sub={sub} sendSub={sendTranscript} setShowSubtitle={setShowSubtitle} showSubtitle={showSubtitle} myStream={myStream} showNote={showNote} setShowNote={setShowNote} setIsScreen={setIsScreen} /> 
+          <IconList user={username} room={roomname} media={myStream} myPeer={myPeer} users={usersInRoom}  sub={sub} sendSub={sendTranscript} setShowSubtitle={setShowSubtitle} showSubtitle={showSubtitle} myStream={myStream} showNote={showNote} setShowNote={setShowNote} setIsScreen={setIsScreen} toggleRaise={toggleRaise} isRaised={isRaised}/> 
           <Stack horizontal>  
             <div className="notesContainer">      
               <h2><center>Meeting Notes</center></h2>
@@ -348,7 +384,7 @@ const Call = ( {location}) => {
                     {peerList_duplicateLess.map((peer, id) => {
                         console.log("passed video peer",peer)
                         return (                    
-                            <Video key={peer.peerID} peer={peer.peer} videoId={peer.peerID} normalRef={myStream} users={usersInRoom} setmyPeer={setmyPeer} isScreen={isScreen} />
+                            <Video key={peer.peerID} peer={peer.peer} videoId={peer.peerID} normalRef={myStream} users={usersInRoom} setmyPeer={setmyPeer} isScreen={isScreen} raiseSocketID={raiseSocketID} lowerSocketID={lowerSocketID}/>
                         );
                     })}
                 </Stack>
@@ -363,9 +399,9 @@ const Call = ( {location}) => {
             <Input message={message} setMessage={setMessage} sendMessage={sendMessage}/>
           </div>
         </div>
-      </Stack>
-      
+      </Stack>      
       {showSubtitle && (<Subtitles subUser={subUser} subText={subText}/>)}
+      <DefaultButton text={isRaised?"raise":"trial"} onClick={toggleRaise} />
     </Stack>
     
     </div>
