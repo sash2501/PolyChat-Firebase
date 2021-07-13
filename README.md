@@ -3,11 +3,9 @@
 
 A public messaging and meeting platform to connect to individuals
 
-
-
-![Logo](img/PolyChat-Logo.png)
+<p align="center">
 <img src="img/PolyChat-Logo.png" alt="Logo" width="200"/>
-
+</p>
 
 ## Features
 
