@@ -1,2 +1,56 @@
-# PolyChat-Firebase
-PolyChat with Firebase Realtime Database
+
+# PolyChat AKA Sassycode's Teams
+
+A public messaging and meeting platform to connect to individuals
+
+
+
+![Logo](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/th5xamgrr6se0x5ro4g6.png)
+
+
+## Features
+
+- [X] User login
+- [X] Creating and joining public teams channels
+- [X] Real-time speech-to-text transcription
+- [X] In-call messaging
+- [X] Teams chatting before and after the call
+- [X] Collaborative meeting notes
+- [X] Enabling/disabling microphone 
+- [X] Enabling/disabling camera
+- [X] Raising/Lowering hand to speak in meeting
+- [ ] Screen Sharing
+- [ ] Collaborative white board
+
+    
+## Installation
+
+Install polychat with npm
+
+Clone this repository with :
+```bash
+git clone ""
+```
+
+Installing Server Side dependecies. Go to root folder.
+
+```bash
+  cd server
+  npm install
+  npm start
+```
+
+Installing Client/ Frontend Side dependecies in a new terminal window. Go to root folder.
+```bash
+  cd client
+  npm install
+  npm start
+```
+    
+## Tech Stack
+
+**Client:** React, React Hooks, Firebase - Realtime Database, Simple-Peer, FluentUI
+
+**Server:** Node, Express, Socketio
+
+  
