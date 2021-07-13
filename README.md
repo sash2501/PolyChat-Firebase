@@ -53,4 +53,25 @@ Installing Client/ Frontend Side dependecies in a new terminal window. Go to roo
 
 **Server:** Node, Express, Socketio
 
-  
+
+## Screenshots
+
+Login Page
+
+![App Screenshot](img/Login.png)
+
+Add Room Page
+
+![App Screenshot](img/AddRoom.png)
+
+Room List Page
+
+![App Screenshot](img/RoomList)
+
+Chat Room
+
+![App Screenshot](img/ChatPage.png)
+
+Video Call Room
+
+![App Screenshot](img/PolyChat_Pic.png)  
