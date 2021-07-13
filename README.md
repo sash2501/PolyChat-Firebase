@@ -49,9 +49,17 @@ Installing Client/ Frontend Side dependecies in a new terminal window. Go to roo
     
 ## Tech Stack
 
-**Client:** React, React Hooks, Firebase - Realtime Database, Simple-Peer, FluentUI
+**Client:** 
+- [React](https://reactjs.org/)
+- [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- [Firebase - Realtime Database](https://firebase.google.com/docs/database)
+- [Simple-Peer](https://github.com/feross/simple-peer#readme) 
+- [FluentUI](https://www.microsoft.com/design/fluent/#/)
 
-**Server:** Node, Express, Socketio
+**Server:** 
+- [Nodejs](https://nodejs.org/en/)
+- [Express](https://expressjs.com/)
+- [Socketio](https://socket.io/)
 
 
 ## Screenshots
@@ -66,7 +74,7 @@ Add Room Page
 
 Room List Page
 
-![App Screenshot](img/RoomList)
+![App Screenshot](img/RoomList.png)
 
 Chat Room
 
