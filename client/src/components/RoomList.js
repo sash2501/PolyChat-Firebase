@@ -130,11 +130,11 @@ function RoomList() {
             {/* <Jumbotron> */}
                 <center>
                 <div className="menuBar headingBreak">
-                    <div className="roomNameContainer"><h3>{nickname} </h3></div>
+                    <div className="roomNameContainer"><h1>{nickname} </h1></div>
                     <div className="commandBar"><Button onClick={() => { logout() }}>Logout</Button></div>
                 </div>
                 <div className="aboutContainer"><h2>Create Public Room</h2>
-                <Stack horizontal horizontalAlign="center">
+                <Stack horizontal horizontalAlign="center" tokens={{childrenGap: 30}}>
                     <Stack.Item>
                     <h4>Create Room: </h4>
                     </Stack.Item>

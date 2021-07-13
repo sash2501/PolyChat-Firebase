@@ -19,10 +19,6 @@ const raisedStyles = {
     root: { backgroundColor: 'yellow', borderRadius: '5px'}
   };
 
-// const stackRaisedStyles = {
-//     root: { backgroundColor: 'yellow', borderRadius: '5px'}
-//   };
-
 const Video = (props) => {
     const ref = useRef();
     //console.log("video props",props);

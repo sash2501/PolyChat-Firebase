@@ -137,20 +137,23 @@ footer.StickyFooter {
 }
 
 .wholePage {
-  background-image: url("blossomTree.jpg");
+  background-image: url("img/blossomTree.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  height: 100vh;
+  margin-top: 0vh;
 }
 .chatPage {
-  background-image: url("https://images.unsplash.com/photo-1528756514091-dee5ecaa3278?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80");
+  background-image: url("img/purplePlant.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .callPage {
-  background-image: url("https://images.unsplash.com/photo-1522748906645-95d8adfd52c7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=634&q=80");
+  background-image: url("img/pinkTree.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
+  min-height: 100vh;
 }
 
 .roomBtn {
@@ -212,4 +215,25 @@ footer.StickyFooter {
 
 .fullHeading {
   width:100vw;
+}
+
+.centered {
+  margin:auto
+}
+
+.styleAdd{
+  display:flex; 
+  position:absolute; 
+  top:0; bottom:0; 
+  right:0; 
+  left:0; 
+}
+
+.lessOpaque {
+
+  background-color:rgba(179, 70, 194, 0.712);
+}
+
+h1 {
+  font-family: 'PT Serif', serif;
 }

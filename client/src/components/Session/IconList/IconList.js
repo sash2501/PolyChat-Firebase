@@ -41,6 +41,7 @@ const dialogContentProps = {
 };
 
 const buttonStyle = { borderRadius: '5px', boxShadow: '-4px 10px 35px -1px rgba(0, 0, 0, 0.75)'} //, width: '40px', height: '28px'
+const handStyle = { color: 'orange', borderRadius: '5px', boxShadow: '-4px 10px 35px -1px rgba(0, 0, 0, 0.75)'} 
 
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition
@@ -221,14 +222,6 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
           iconProps={screenCast}
           style={buttonStyle}
         /> */}
-        <Link to={`/`}>
-          <DefaultButton 
-          text="End Call" 
-          iconProps={endCall}
-          style={buttonStyle}
-          onClick={reload}
-          />  
-        </Link> 
         <IconButton 
           className="iconBtn"
           iconProps={cc}
@@ -249,7 +242,7 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
           iconProps={{iconName: 'HandsFree' }}
           title={isRaised?"Lower Hand":"Raise Hand"}
           onClick={toggleRaise}
-          style={buttonStyle}
+          style={isRaised? handStyle: buttonStyle}
         />
         <DefaultButton 
           secondaryText="See User List" 
@@ -276,6 +269,15 @@ console.log("setmyPeer in iconlist",myPeer, myStream)
               </Stack>
             </DialogFooter>
           </Dialog>
+          <Link to={`/`}>
+          <DefaultButton 
+          text="End Call" 
+          iconProps={endCall}
+          style={buttonStyle}
+          onClick={reload}
+          />  
+        </Link> 
+        
       </Stack>      
     </div>
   </div>

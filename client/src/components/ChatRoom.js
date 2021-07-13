@@ -129,13 +129,13 @@ function ChatRoom() {
                                         Exit Chat
                                     </Button>
                                 </Card>
-                                <Card className="UsersCard">
-                                    <Link target="_blank" to={`/call?name=${nickname}&room=${roomname}`}>
+                                <Link target="_blank" to={`/call?name=${nickname}&room=${roomname}`}>
+                                    <Card className="UsersCard">
                                         <Button variant="primary" type="button">
                                             Join Video Call
                                         </Button>
-                                    </Link>
-                                </Card>     
+                                    </Card> 
+                                </Link>
                             </Card>         
                             <div className="usersOnline boxShadows">
                                 <h3>Participants</h3>    

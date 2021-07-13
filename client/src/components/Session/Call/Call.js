@@ -368,7 +368,6 @@ const Call = ( {location}) => {
                   style={buttonStyle}/></center>
             </div>    
             <div className="videoGrid">
-            {/* <Container> */}
             {/* <Stack horizontal> */}
               <Stack className="videoStack"
                   horizontal
@@ -388,7 +387,6 @@ const Call = ( {location}) => {
                         );
                     })}
                 </Stack>
-            {/* </Container>   */}
             </div>
           </Stack>
         </Stack>
@@ -401,7 +399,6 @@ const Call = ( {location}) => {
         </div>
       </Stack>      
       {showSubtitle && (<Subtitles subUser={subUser} subText={subText}/>)}
-      <DefaultButton text={isRaised?"raise":"trial"} onClick={toggleRaise} />
     </Stack>
     
     </div>

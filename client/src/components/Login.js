@@ -42,17 +42,21 @@ function Login() {
     }
 
     return (
-        <div className="wholePage">
+        <div className="wholePage styleAdd">
             {showLoading &&
                 <center><ProgressIndicator label="Loading" description="Hang Tight!" /></center>
             }
+            <div className="centered">
             <h1><center> SASSYCODE'S TEAMS </center></h1> 
-            <center><div className="aboutContainer">
+            <center><div className="aboutContainer lessOpaque">
+                <h2>
+                    Welcome to Sassycode's Teams! 
+                </h2>
                 <p>
-                    Welcome to Sassycode's Teams! Get started by creating a user name, or loggin in to your created user name.
+                    Get started by creating a new user name, or logging in to your created user name.
                 </p>
                 <p>
-                    Once logged in, Join a public room or create one of your own room and connect with your team.
+                    Once logged in, Join a public room or create one of your own and connect with your team!
                 </p>
             </div>
             <div className="loginContainer">
@@ -68,6 +72,7 @@ function Login() {
                 </Form>
             {/* </Jumbotron> */}
             </div></center>
+            </div>
         </div>
     );
 }

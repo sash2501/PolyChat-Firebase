@@ -51,11 +51,11 @@ function AddRoom() {
     }
 
     return (
-        <div className="wholePage">
+        <div className="wholePage styleAdd" >
             {showLoading &&
                 <center><ProgressIndicator label="Loading" description="Hang Tight!" /></center>
             }
-            <Jumbotron className="aboutContainer">
+            <div className="aboutContainer centered">
                 <h2>Please enter new Room</h2>
                 <Form onSubmit={save}>
                     <FormGroup>
@@ -66,7 +66,7 @@ function AddRoom() {
                         Add
                     </Button>
                 </Form>
-            </Jumbotron>
+            </div>
         </div>
     );
 }
