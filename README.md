@@ -6,6 +6,7 @@ A public messaging and meeting platform to connect to individuals
 
 
 ![Logo](img/PolyChat-Logo.png)
+<img src="img/PolyChat-Logo.png" alt="Logo" width="200"/>
 
 
 ## Features
@@ -32,7 +33,7 @@ Clone this repository with :
 git clone "git@github.com:sash2501/PolyChat-Firebase.git"
 ```
 
-Installing Server Side dependecies. Go to root folder.
+Installing Server Side dependecies. Go to project root folder.
 
 ```bash
   cd server
@@ -40,7 +41,7 @@ Installing Server Side dependecies. Go to root folder.
   npm start
 ```
 
-Installing Client/ Frontend Side dependecies in a new terminal window. Go to root folder.
+Installing Client/ Frontend Side dependecies in a new terminal window. Go to project root folder.
 ```bash
   cd client
   npm install
