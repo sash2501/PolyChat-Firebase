@@ -29,7 +29,7 @@ Install polychat with npm
 
 Clone this repository with :
 ```bash
-git clone ""
+git clone "git@github.com:sash2501/PolyChat-Firebase.git"
 ```
 
 Installing Server Side dependecies. Go to root folder.
