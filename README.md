@@ -92,4 +92,4 @@ Video Call Room
 
 ## App Workflow
 
-[App Workflow](docs/PolyChatFlow.png)
+![App Workflow](docs/PolyChatFlow.png)
