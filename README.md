@@ -18,6 +18,7 @@ A public messaging and meeting platform to connect to individuals
 - [X] Enabling/disabling microphone 
 - [X] Enabling/disabling camera
 - [X] Raising/Lowering hand to speak in meeting
+- [X] Online User Lists and Meeting Invitations
 - [ ] Screen Sharing
 - [ ] Collaborative white board
 
@@ -88,3 +89,7 @@ Video Call Room
 
 [YouTube Video](https://www.youtube.com/watch?v=OuKLX9omTRM)
   
+
+## App Workflow
+
+[App Workflow](docs/PolyChatFlow.png)
