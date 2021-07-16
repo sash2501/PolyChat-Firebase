@@ -93,3 +93,7 @@ Video Call Room
 ## App Workflow
 
 ![App Workflow](docs/PolyChatFlow.png)
+
+## Documentation
+
+[Web App Documentation](docs/PolyChat Documentation.docx)
